@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woodlawn NY Car & SUV | Elite Transportation</title>
+    
+    <!-- Link CSS using Flask static helper -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Modern Font & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">WOODLAWN<span>NY</span></div>
+            
+            <!-- Added Navigation Links for the Toggle Menu -->
+<ul class="nav-links">
+    <li><a href="{{ url_for('index') }}">Home</a></li>
+    <li><a href="{{ url_for('booking') }}">Booking</a></li>
+    <li><a href="{{ url_for('fleet') }}">Fleet</a></li>
+    <li><a href="{{ url_for('services') }}">Services</a></li>
+</ul>
+
+            <div class="nav-actions">
+                <a href="tel:+10000000000" class="phone-link">
+                    <i class="fas fa-phone"></i> <span>(555) 000-0000</span>
+                </a>
+                <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="home">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-container">
+                <div class="hero-text">
+                    <span class="badge">Premium Livery Service</span>
+                    <h1>Arrive in <span class="text-gradient">Style & Comfort</span></h1>
+                    <p>Experience the finest private car service in Woodlawn and the greater New York area. Punctual, professional, and luxury-driven.</p>
+                    <div class="hero-btns">
+                        <a href="#booking" class="btn-main">Book Your Ride</a>
+                        <a href="#fleet" class="btn-outline">View Fleet</a>
+                    </div>
+                </div>
+
+                <!-- Glassmorphism Booking Card -->
+                <div id="booking" class="booking-card">
+                    <div class="card-header">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Instant Quote</h3>
+                    </div>
+                    <form id="bookingForm">
+                        <div class="input-box">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <!-- Added id for Google Places Autocomplete -->
+                            <input type="text" id="pickup" placeholder="Pickup Address (e.g. JFK Airport)" required>
+                        </div>
+                        <div class="input-box">
+                            <i class="fas fa-location-arrow"></i>
+                            <input type="text" id="dropoff" placeholder="Drop-off Destination" required>
+                        </div>
+                        <div class="form-grid">
+                            <div class="input-box">
+                                <i class="fas fa-car"></i>
+                                <select id="vehicle">
+                                    <option value="sedan">Executive Sedan</option>
+                                    <option value="suv">Premium SUV</option>
+                                </select>
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-clock"></i>
+                                <input type="time" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Calculate Fare <i class="fas fa-arrow-right"></i></button>
+                    </form>
+                    <div id="fareResult" class="result-area"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="features">
+            <div class="feature">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Safe & Licensed</h4>
+                <p>Fully T-L-C compliant drivers.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <h4>24/7 Availability</h4>
+                <p>Always on time, every time.</p>
+            </div>
+            <div class="feature">
+                <i class="fas fa-plane"></i>
+                <h4>Airport Experts</h4>
+                <p>JFK, LGA, & EWR specialists.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer for SEO -->
+    <footer style="text-align: center; padding: 40px; color: #666; font-size: 0.8rem;">
+        &copy; 2026 Woodlawn NY Car & SUV Service. All rights reserved.
+    </footer>
+
+    <!-- Google Maps API - Replace YOUR_API_KEY -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    
+    <!-- Link JS using Flask static helper -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+    <script>
+document.getElementById('bookingForm').addEventListener('submit', async function(e) {
+    // 1. Prevent the page from reloading on form submit
+    e.preventDefault(); 
+    
+    // 2. Get form values
+    const pickup = document.getElementById('pickup').value;
+    const dropoff = document.getElementById('dropoff').value;
+    const vehicle = document.getElementById('vehicle').value;
+    const resultDiv = document.getElementById('fareResult');
+
+    // Show a loading message
+    resultDiv.innerHTML = `<p style="color: #666;">Calculating your fare...</p>`;
+    resultDiv.style.display = 'block';
+
+    /* NOTE: Real distance calculations usually require the Google Matrix API. 
+      For now, we will simulate a random distance string (e.g., "15.5 mi") 
+      matching exactly what your Flask app's "distance_text.split(' ')[0]" expects.
+    */
+    const simulatedDistance = (Math.random() * (30 - 5) + 5).toFixed(1) + " mi";
+
+    try {
+        // 3. Send the data to your Flask backend API
+        const response = await fetch('/api/calculate-fare', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                distance: simulatedDistance,
+                vehicle: vehicle
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // 4. Inject the final price dynamically into the page
+        resultDiv.innerHTML = `
+            <div style="padding: 15px; background: #eef9f1; border-left: 4px solid #2ecc71; border-radius: 4px; margin-top: 15px;">
+                <h4 style="margin: 0 0 5px 0; color: #27ae60;">Estimated Fare</h4>
+                <p style="margin: 0; font-size: 24px; font-weight: bold; color: #333;">
+                    $${data.fare} <span style="font-size: 14px; font-weight: normal; color: #666;">${data.currency}</span>
+                </p>
+                <small style="color: #777;">Simulated Distance: ${simulatedDistance} (${pickup} ➔ ${dropoff})</small>
+            </div>
+        `;
+
+    } catch (error) {
+        console.error('Error:', error);
+        resultDiv.innerHTML = `<p style="color: #e74c3c;">Failed to calculate fare. Please try again.</p>`;
+    }
+});
+</script>
+</body>
+</html>

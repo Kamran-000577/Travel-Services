@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Our Fleet | Woodlawn NY Car & SUV{% endblock %}
+
+{% block content %}
+<section class="sub-page-header">
+    <div class="container">
+        <span class="badge">Luxury on Wheels</span>
+        <h1>The <span class="text-gradient">Woodlawn Fleet</span></h1>
+    </div>
+</section>
+
+<section class="fleet-detail">
+    <div class="fleet-card-horizontal booking-card">
+        <div class="fleet-info">
+            <div class="fleet-tag">Most Popular</div>
+            <h2>Executive Sedans</h2>
+            <p>Our black-on-black sedans are perfect for the solo executive or a couple heading to a Broadway show or a flight at LGA. Meticulously maintained and odor-free.</p>
+            <ul class="fleet-specs">
+                <li><i class="fas fa-user-friends"></i> 3 Passengers</li>
+                <li><i class="fas fa-briefcase"></i> 2 Standard Suitcases</li>
+                <li><i class="fas fa-wifi"></i> Complimentary Wi-Fi</li>
+            </ul>
+        </div>
+        <div class="fleet-image sedan-bg"></div>
+    </div>
+
+    <div class="fleet-card-horizontal booking-card reverse">
+        <div class="fleet-info">
+            <div class="fleet-tag">Group Choice</div>
+            <h2>Premium SUVs</h2>
+            <p>The gold standard for family airport travel. Our Chevrolet Suburbans and Cadillac Escalades offer massive legroom and enough trunk space for a family of six.</p>
+            <ul class="fleet-specs">
+                <li><i class="fas fa-user-friends"></i> 6-7 Passengers</li>
+                <li><i class="fas fa-suitcase-rolling"></i> 6 Large Suitcases</li>
+                <li><i class="fas fa-plug"></i> USB Charging Ports</li>
+            </ul>
+        </div>
+        <div class="fleet-image suv-bg"></div>
+    </div>
+</section>
+{% endblock %}
